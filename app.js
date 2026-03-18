@@ -38,14 +38,17 @@ app.post('/delete', urlencodedParser, function(req,res){
     res.redirect('/');
 });
 
+// ----- LAB 3-4 ------
+
+// 1. POLACZENIE Z BAZA
 var mongoose = require('mongoose');
 var mongoDB = 'mongodb://127.0.0.1/books_db';
 mongoose.connect(mongoDB);
 var db = mongoose.connection;
 db.on('error', console.error.bind(console,'MongoDB connection error:'));
 
+// 2. TWORZENIE SCHEMATU
 var Schema = mongoose.Schema;
-// Define schema
 const BookSchema = new Schema({
     title: String,
     author: String
@@ -54,13 +57,14 @@ const BookSchema = new Schema({
 // kompilacja modelu ze schematu
 var BookModel = mongoose.model('BookModel', BookSchema);
 
-//tworzenie dokumentu
+// 3. TWORZENIE DOKUMENTU
 var book = new BookModel();
 //zapis
 book.save().then(savedBook => {
   savedBook === book; // true
 });
 
+// 4. ODCZYT DOKUMENTOW Z BAZY
 BookModel.find().then(books => {
   console.log(books);
 });
