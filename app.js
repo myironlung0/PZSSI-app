@@ -8,10 +8,13 @@ var urlencodedParser = bodyParser.urlencoded({ extended: false });
 
 app.set('view engine', 'ejs'); //podlaczenie gen szablonow
 
-const books = [];
+//const books = [];
 
 app.get('/', function(req, res) {
-    res.render('index',{messages:books}); //przesłanie wiadomości
+    BookModel.find()
+        .then(allBooks => {
+            res.render('index', { messages: allBooks });
+        });
 });
 
 app.post('/msg',urlencodedParser , function(req, res) {
@@ -21,9 +24,23 @@ app.post('/msg',urlencodedParser , function(req, res) {
     const title = req.body.title;
     const author = req.body.author;
 
-    books.push({ //object literal
-        title: title,
-        author: author
+    // books.push({ //object literal
+    //     title: title,
+    //     author: author
+    // });
+
+    const book = new BookModel({
+        title,
+        author
+    });
+
+    book.save()
+    .then(savedBook => {
+        console.log("Saved book:", savedBook);
+        savedBook === book;
+    })
+    .catch(err => {
+        console.log("Error while saving book");
     });
 
     //res.render('index', { messages: books }); // wysłanie całej listy
@@ -36,6 +53,10 @@ app.post('/delete', urlencodedParser, function(req,res){
     books.splice(idx, 1); //usuwanie elementu z tablicy
     
     res.redirect('/');
+});
+
+app.post('/change', urlencodedParser, function(req,res){
+    
 });
 
 // ----- LAB 3-4 ------
@@ -56,18 +77,6 @@ const BookSchema = new Schema({
 
 // kompilacja modelu ze schematu
 var BookModel = mongoose.model('BookModel', BookSchema);
-
-// 3. TWORZENIE DOKUMENTU
-var book = new BookModel();
-//zapis
-book.save().then(savedBook => {
-  savedBook === book; // true
-});
-
-// 4. ODCZYT DOKUMENTOW Z BAZY
-BookModel.find().then(books => {
-  console.log(books);
-});
 
 const server = http.createServer(app);
 const port = 8000;
