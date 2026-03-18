@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Messages</title>
+</head>
+<body>
+<p>Tytuly:</p> <!-- oczekiwanie na dane -->
+    <ul id="titleList">
+        <% for (let i = 0; i < messages.length; i++) { %>  
+         <li>
+            <%= messages[i].title%> - <%= messages[i].author %> 
+            <form action="/delete" method="post">
+                <button type="submit" type="hidden" name="index" value="<%= i %>">Usuń</button>
+            </form>
+        </li> <!-- Output the current number -->  
+        <% } %> 
+    </ul>
+
+<p>Nowy tytul: </p>
+<form action="/msg" method="post">      
+    <label for="title">Tytuł:</label>
+    <input id="title" type="text" name="title">
+    <br>
+    <label for="author">Autor:</label>
+    <input id="author" type="text" name="author">
+    <br><br>
+    <input type="submit" value="Dodaj">
+</form>
+</body>
+</html>
