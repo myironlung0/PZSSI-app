@@ -8,7 +8,6 @@ var urlencodedParser = bodyParser.urlencoded({ extended: false });
 
 app.set('view engine', 'ejs'); //podlaczenie gen szablonow
 
-
 const books = [];
 
 app.get('/', function(req, res) {
@@ -34,10 +33,36 @@ app.post('/msg',urlencodedParser , function(req, res) {
 app.post('/delete', urlencodedParser, function(req,res){
     const idx = req.body.index; 
     console.log("Delete book " + idx);
-    books.splice(idx, 1);
+    books.splice(idx, 1); //usuwanie elementu z tablicy
     
     res.redirect('/');
+});
 
+var mongoose = require('mongoose');
+var mongoDB = 'mongodb://127.0.0.1/books_db';
+mongoose.connect(mongoDB);
+var db = mongoose.connection;
+db.on('error', console.error.bind(console,'MongoDB connection error:'));
+
+var Schema = mongoose.Schema;
+// Define schema
+const BookSchema = new Schema({
+    title: String,
+    author: String
+});
+
+// kompilacja modelu ze schematu
+var BookModel = mongoose.model('BookModel', BookSchema);
+
+//tworzenie dokumentu
+var book = new BookModel();
+//zapis
+book.save().then(savedBook => {
+  savedBook === book; // true
+});
+
+BookModel.find().then(books => {
+  console.log(books);
 });
 
 const server = http.createServer(app);
