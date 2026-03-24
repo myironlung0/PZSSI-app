@@ -10,8 +10,11 @@
          <li>
             <%= messages[i].title%> - <%= messages[i].author %> 
             <form action="/delete" method="post">
-                <button type="submit" type="hidden" name="index" value="<%= i %>">Usuń</button>
+                <button type="submit" name="_id" value="<%= messages[i]._id%>">Usuń</button>
             </form>
+
+            <a href="/update/<%= messages[i]._id %>">Popraw</a>
+
         </li> <!-- Output the current number -->  
         <% } %> 
     </ul>
