@@ -19,7 +19,7 @@
         <% } %> 
     </ul>
 
-<p>Nowy tytul: </p>
+<!-- <p>Nowy tytul: </p>
 <form action="/msg" method="post">      
     <label for="title">Tytuł:</label>
     <input id="title" type="text" name="title">
@@ -28,6 +28,18 @@
     <input id="author" type="text" name="author">
     <br><br>
     <input type="submit" value="Dodaj">
+</form> -->
+
+<p>Nowy tytul (REST API): </p>
+<form action="/api/msg" method="post">      
+    <label for="title">Tytuł:</label>
+    <input id="title" type="text" name="title">
+    <br>
+    <label for="author">Autor:</label>
+    <input id="author" type="text" name="author">
+    <br><br>
+    <input type="submit" value="Dodaj">
 </form>
+
 </body>
 </html>

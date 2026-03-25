@@ -4,31 +4,48 @@ const app = express();
 
 // niezbędny body-parser i urlencoder
 const bodyParser = require('body-parser');
-var urlencodedParser = bodyParser.urlencoded({ extended: false });
+app.use(express.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
 app.set('view engine', 'ejs'); //podlaczenie gen szablonow
 
-//const books = [];
+// podlaczenie routera i controllera
+const routes = require('./routes/books');
+app.use('/', routes);
+const server = http.createServer(app);
+const port = 8000;
+server.listen(port);
+console.debug('Server listening on port ' + port);
 
-app.get('/', function(req, res) {
+
+// app.get('/', function(req, res) {
+//     BookModel.find()
+//         .then(allBooks => {
+//             res.render('index', { messages: allBooks });
+//         });
+// });
+
+// REST API 
+app.get('/api/books', function(req, res) {
     BookModel.find()
-        .then(allBooks => {
-            res.render('index', { messages: allBooks });
-        });
+    .then(allBooks => {
+        res.status(200).json(allBooks);
+    })
+    .catch(err => {
+        res.status(500).json({ error: err.message });
+    });
+
+    
 });
 
-app.post('/msg',urlencodedParser , function(req, res) {
+app.post('/api/msg', bodyParser, function(req, res){
     console.log("Message from client side: " + req.body.title);
     console.log("2nd message from client side: " + req.body.author);
 
     const id = req.body._id;
     const title = req.body.title;
     const author = req.body.author;
-
-    // books.push({ //object literal
-    //     title: title,
-    //     author: author
-    // });
 
     const book = new BookModel({
         id,
@@ -40,51 +57,50 @@ app.post('/msg',urlencodedParser , function(req, res) {
     .then(savedBook => {
         console.log("Saved book:", savedBook);
         savedBook === book;
+        res.json(book);
     })
     .catch(err => {
         console.log("Error while saving book");
+        res.status(201).send(book);
     });
-
-    //res.render('index', { messages: books }); // wysłanie całej listy
-    res.redirect('/');
 });
 
-app.post('/delete', urlencodedParser, async function(req,res){
-    // const idx = req.body.index; 
-    // console.log("Delete book " + idx);
-    // books.splice(idx, 1); //usuwanie elementu z tablicy
+// app.post('/delete', bodyParser, async function(req,res){
+//     // const idx = req.body.index; 
+//     // console.log("Delete book " + idx);
+//     // books.splice(idx, 1); //usuwanie elementu z tablicy
 
-    const id = req.body._id;
+//     const id = req.body._id;
 
-    await BookModel.deleteOne({_id : id});
-    // await BookModel.findByIdAndDelete
+//     await BookModel.deleteOne({_id : id});
+//     // await BookModel.findByIdAndDelete
 
-    res.redirect('/');
-});
+//     res.redirect('/');
+// });
 
-app.get('/update/:id', async function(req, res) {
-    const book = await BookModel.findById(req.params.id);
+// app.get('/update/:id', async function(req, res) {
+//     const book = await BookModel.findById(req.params.id);
 
-    res.render('update', {book})
-});
+//     res.render('update', {book})
+// });
 
-app.post('/update', urlencodedParser, async function(req,res){
-    const id = req.body._id;
+// app.post('/update', bodyParser, async function(req,res){
+//     const id = req.body._id;
 
-    // const document = BookModel.find({_id : id});
-    // document.title = req.body.title;
-    // document.author = req.body.title;
-    // await document.save();
+//     // const document = BookModel.find({_id : id});
+//     // document.title = req.body.title;
+//     // document.author = req.body.title;
+//     // await document.save();
 
-    await BookModel.updateOne({_id : id}, 
-        {
-            title : req.body.title, 
-            author : req.body.author
-        });
+//     await BookModel.updateOne({_id : id}, 
+//         {
+//             title : req.body.title, 
+//             author : req.body.author
+//         });
         
-    res.redirect('/');
+//     res.redirect('/');
     
-});
+// });
 
 // 1. POLACZENIE Z BAZA
 var mongoose = require('mongoose');
@@ -103,8 +119,3 @@ const BookSchema = new Schema({
 
 // kompilacja modelu ze schematu
 var BookModel = mongoose.model('BookModel', BookSchema);
-
-const server = http.createServer(app);
-const port = 8000;
-server.listen(port);
-console.debug('Server listening on port ' + port);
