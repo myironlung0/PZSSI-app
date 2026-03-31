@@ -4,9 +4,23 @@
 <title>Messages</title>
 </head>
 <body>
+<p>Tytuly:</p> <!-- oczekiwanie na dane -->
+    <ul id="titleList">
+        <% for (let i = 0; i < messages.length; i++) { %>  
+         <li>
+            <%= messages[i].title%> - <%= messages[i].author %> 
+            <form action="/delete" method="post">
+                <button type="submit" name="_id" value="<%= messages[i]._id%>">Usuń</button>
+            </form>
 
-<p>Nowy tytul (REST API): </p>
-<form action="/" method="post">      
+            <a href="/update/<%= messages[i]._id %>">Popraw</a>
+
+        </li> <!-- Output the current number -->  
+        <% } %> 
+    </ul>
+
+<p>Nowy tytul: </p>
+<form action="/msg" method="post">      
     <label for="title">Tytuł:</label>
     <input id="title" type="text" name="title">
     <br>
@@ -15,6 +29,5 @@
     <br><br>
     <input type="submit" value="Dodaj">
 </form>
-
 </body>
 </html>
