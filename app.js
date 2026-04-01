@@ -22,6 +22,14 @@ db.on('error', console.error.bind(console,'MongoDB connection error:'));
 const routes = require('./routes/api/books');
 app.use('/api/books', routes);
 
+
+// swagger
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('./swagger.json');
+
+app.use('/api-docs', swaggerUi.serve,
+swaggerUi.setup(swaggerDocument));
+
 //import bookModel - przeniesiony do models
 const BookModel = require('./models/book');
 
