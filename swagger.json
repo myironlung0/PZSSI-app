@@ -11,7 +11,7 @@
     "http"
   ],
   "paths":{
-    "/api/books/": {
+    "/books/": {
       "get": {
         "summary": "Pobiera wszystkie książki",
         "description": "Zwraca listę wszystkich książek w bazie danych",
@@ -54,7 +54,7 @@
         }
       }
     },
-    "/api/books/{id}": {
+    "/books/{id}": {
       "get": {
         "summary": "Pobiera pojedynczą książkę",
         "description": "Pobiera książkę o podanym ID",
