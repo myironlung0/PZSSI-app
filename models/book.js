@@ -7,7 +7,18 @@ const BookSchema = new Schema({
     author: String
 });
 
+var schemaQl = buildSchema(`
+    type Book {
+        id: ID!
+        title: String
+        author: String
+    }
+`);
+
+
 // kompilacja modelu ze schematu
 //var BookModel = 
 // eksportuje model
 module.exports = mongoose.model('BookModel', BookSchema);
+
+module.exports.schemaQl = schemaQl;

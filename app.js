@@ -2,6 +2,10 @@ const http = require('http');
 const express = require('express');
 const app = express();
 
+// graphql
+var { graphqlHTTP } = require('express-graphql');
+var { buildSchema } = require('graphql');
+
 // niezbędny body-parser i urlencoder
 const bodyParser = require('body-parser');
 app.use(express.json()); // parsowanie json dla api, middleware dla api
