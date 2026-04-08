@@ -120,6 +120,7 @@ var schema = buildSchema(`
     type Mutation {
         createBook(input: BookInput): Book
         updateBook(id: ID!, input: BookInput): Book
+        deleteBook(id:ID!): Book
     }   
 `);
 
@@ -159,6 +160,16 @@ var root = {
 
         return updated;
     },
+
+    deleteBook: async ({id}) =>{
+        const deleted = await BookModel.findByIdAndDelete(id);
+
+        if(!deleted){
+            throw new Error('No book exists with id ' + id);
+        }
+
+        return deleted;
+    }
 };
 
 app.use('/graphql', graphqlHTTP({
