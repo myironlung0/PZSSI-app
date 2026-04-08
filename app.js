@@ -2,10 +2,6 @@ const http = require('http');
 const express = require('express');
 const app = express();
 
-// graphql
-var { graphqlHTTP } = require('express-graphql');
-var { buildSchema } = require('graphql');
-
 // niezbędny body-parser i urlencoder
 const bodyParser = require('body-parser');
 app.use(express.json()); // parsowanie json dla api, middleware dla api
@@ -144,7 +140,7 @@ var root = {
         const id = input._id;
         const title = input.title;
         const author = input.author;
-        
+
         const book = new BookModel({
             id,
             title,
