@@ -94,12 +94,82 @@ app.post('/update', urlencodedParser, async function(req,res){
     
 });
 
+
+
+
+// GRAPHQL
+
+var { graphqlHTTP } = require('express-graphql');
+var { buildSchema } = require('graphql');
+
+
+var schema = buildSchema(`
+    input BookInput {
+        title: String
+        author: String
+    }
+    type Book {
+        id: ID!
+        title: String
+        author: String
+    }
+    type Query {
+        getBook(id: ID!): Book
+        getBooks: [Book!]!
+    }
+    type Mutation {
+        createBook(input: BookInput): Book
+        updateBook(id: ID!, input: BookInput): Book
+    }   
+`);
+
+var root = {
+    getBook: async ({id}) => {
+        const book = await BookModel.findById(id);
+        if (!book) {
+            throw new Error('No book exists with id ' + id);
+        }
+        return book;
+    },
+
+    getBooks: async () => {
+        return await BookModel.find();
+    },
+
+    createBook: async ({input}) => {
+        const id = input._id;
+        const title = input.title;
+        const author = input.author;
+        
+        const book = new BookModel({
+            id,
+            title,
+            author
+        });
+
+        return await book.save();
+    },
+
+    updateBook: async ({id, input}) => {
+        const updated = await BookModel.findByIdAndUpdate(id,{title: input.title, author: input.author},{ new: true });
+
+        if (!updated) {
+            throw new Error('No book exists with id ' + id);
+        }
+
+        return updated;
+    },
+};
+
+app.use('/graphql', graphqlHTTP({
+    schema: schema,
+    rootValue: root,
+    graphiql: true,
+}));
+
 const server = http.createServer(app);
 const port = 8000;
 server.listen(port);
 console.debug('Server listening on port ' + port);
 
-
-
-
-// pod /api json zwracam, tam jest api, a tak to aplikacja jak normalnie.
+console.log('Running a GraphQL API server at http://localhost:8000/graphql');
