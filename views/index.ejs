@@ -5,29 +5,24 @@
 </head>
 <body>
 <p>Tytuly:</p> <!-- oczekiwanie na dane -->
-    <ul id="titleList">
+    <table id="titleList">
         <% for (let i = 0; i < messages.length; i++) { %>  
-         <li>
-            <%= messages[i].title%> - <%= messages[i].author %> 
-            <form action="/delete" method="post">
-                <button type="submit" name="_id" value="<%= messages[i]._id%>">Usuń</button>
-            </form>
-
-            <a href="/update/<%= messages[i]._id %>">Popraw</a>
+         <tr>
+            <td><%= messages[i].title%></td>
+            <td><%= messages[i].author %></td>
+            <td>
+                <button onclick="deleteBook('<%= messages[i]._id %>')">Usuń</button>
+                <button onclick="updateBook('<%= messages[i]._id %>')">Edytuj</button>
+            </td>
+        </tr>
 
         </li> <!-- Output the current number -->  
         <% } %> 
-    </ul>
+    </table>
 
 <p>Nowy tytul: </p>
-<form action="/msg" method="post">      
-    <label for="title">Tytuł:</label>
-    <input id="title" type="text" name="title">
-    <br>
-    <label for="author">Autor:</label>
-    <input id="author" type="text" name="author">
-    <br><br>
-    <input type="submit" value="Dodaj">
-</form>
+    <input type="text" id="title" name="title">
+    <input type="text" id="author" name="author">
+    <button onclick="addBook">Dodaj</button>
 </body>
 </html>

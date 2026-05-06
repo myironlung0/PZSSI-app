@@ -41,8 +41,8 @@ app.get('/', function(req, res) {
 });
 
 app.post('/msg',urlencodedParser , function(req, res) {
-    console.log("Message from client side: " + req.body.title);
-    console.log("2nd message from client side: " + req.body.author);
+    console.log("Book title: " + req.body.title);
+    console.log("Author name: " + req.body.author);
 
     const id = req.body._id;
     const title = req.body.title;
