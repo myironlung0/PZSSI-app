@@ -6,23 +6,30 @@
 <body>
 <p>Tytuly:</p> <!-- oczekiwanie na dane -->
     <table id="titleList">
-        <% for (let i = 0; i < messages.length; i++) { %>  
-         <tr>
-            <td><%= messages[i].title%></td>
-            <td><%= messages[i].author %></td>
-            <td>
-                <button onclick="deleteBook('<%= messages[i]._id %>')">Usuń</button>
-                <button onclick="updateBook('<%= messages[i]._id %>')">Edytuj</button>
-            </td>
-        </tr>
-
-        </li> <!-- Output the current number -->  
-        <% } %> 
+        <thead>
+            <tr>
+                <th>Tytul</th>
+                <th>Autor</th>
+                <th>Akcje</th> <!-- akcje to beda przyciski do usuwania itd -->
+            </tr>
+        </thead>
+        <tbody id="bookTableBody">
+            <!-- ajax wstawi dane -->
+        </tbody>
     </table>
 
-<p>Nowy tytul: </p>
-    <input type="text" id="title" name="title">
-    <input type="text" id="author" name="author">
-    <button onclick="addBook">Dodaj</button>
+<p>Nowy tytul:</p>
+    <input type="text" id="title" name="title" placeholder="Tytuł">
+    <input type="text" id="author" name="author" placeholder="Autor">
+    <button onclick="addBook()">Dodaj</button>
+
+    <!-- zalacz js skrypty -->
+    <script src="/books_ajax.js"></script>
+    <script src="/render_books.js"></script>
+
+    <!-- zaladuj ksiazki po zaladowaniu strony -->
+    <script>
+        loadBooks();
+    </script>
 </body>
 </html>

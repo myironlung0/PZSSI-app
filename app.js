@@ -5,6 +5,7 @@ const app = express();
 // niezbędny body-parser i urlencoder
 const bodyParser = require('body-parser');
 app.use(express.json()); // parsowanie json dla api, middleware dla api
+app.use(express.static('public')); // static files css js
 const urlencodedParser = bodyParser.urlencoded({ extended: false });
 app.use(bodyParser.json());
 
