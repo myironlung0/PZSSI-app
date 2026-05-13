@@ -72,7 +72,7 @@ router.delete("/:id", async function(req,res) {
         const id = req.params.id;
 
         await BookModel.deleteOne({_id : id});
-        //  const deletedBook = await BookModel.findByIdAndDelete(req.params.id);
+        const deletedBook = await BookModel.findByIdAndDelete(req.params.id);
        
         res.status(200).json({ message: 'Usunieto', book: deletedBook }); // dobra  praktyka jest zwrocic to, co usuwamy
     }catch(error){

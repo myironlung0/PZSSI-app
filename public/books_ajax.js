@@ -1,32 +1,50 @@
 function loadBooks(){
-    fetch('/api/books')
-    .then(res => res.json())
-    .then(data => renderBooks(data));
-
+    $.ajax({
+        url: '/api/books',
+        method: 'GET',
+        success: function(books){
+            renderBooks(books);
+        },
+        error: function(err){
+            console.error('Error fetching books:', err);
+        }
+    });
 }
 
 function addBook(){
     const title = document.getElementById('title').value;
     const author = document.getElementById('author').value;
     
-    fetch('/api/books', {
+    $.ajax({
+        url: '/api/books',
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ title, author })
-    })
-    .then(res => res.json())
-    .then(() => {
-        loadBooks(); // odswiez tab
-        // wyczysc pola
-        document.getElementById('title').value = '';
-        document.getElementById('author').value = '';
+        data: JSON.stringify({ title, author }),
+        contentType: 'application/json',
+        success: function(){
+            loadBooks();
+            document.getElementById('title').value = '';
+            document.getElementById('author').value = '';
+        },
+        error: function(err){
+            console.error('Error adding book:', err);
+        }
     });
-
+    loadBooks(); // odswiez tab
+            // wyczysc pola
+            document.getElementById('title').value = '';
+            document.getElementById('author').value = '';
 }
 
 function deleteBook(id) {
-    fetch(`/api/books/${id}`, {
-        method: 'DELETE'
+    $.ajax({
+        url: `/api/books/${id}`,
+        method: 'DELETE',
+        success: function(){
+            loadBooks();
+        },
+        error: function(err){
+            console.error('Error deleting book:', err);
+        }
     })
     .then(() => loadBooks());
 }
@@ -36,14 +54,19 @@ function updateBook(id) {
     const newAuthor = prompt("Podaj nowego autora:");
 
     if (newTitle && newAuthor) {
-        fetch(`/api/books/${id}`, {
+        $.ajax({
+            url: `/api/books/${id}`,
             method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ title: newTitle, author: newAuthor })
-        })
-        .then(() => loadBooks());
+            data: JSON.stringify({ title: newTitle, author: newAuthor }),
+            contentType: 'application/json',
+            success: function(){
+                loadBooks();
+            },
+            error: function(err){
+                console.error('Error updating book:', err);
+            }
+        });
     }
-
 }
 
 // uruchom po zaladowaniu strony
