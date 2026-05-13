@@ -9,8 +9,8 @@ function renderBooks(books){
         row.insertCell(1).textContent = books[i].author;
         
         const actionsCell = row.insertCell(2);
-        actionsCell.innerHTML = `<button onclick="deleteBook('${books[i]._id}')">Usun</button>
-                                <button onclick="updateBook('${books[i]._id}')">Edytuj</button>`;
+        actionsCell.innerHTML = `<button data-id="${books[i]._id}" onclick="deleteBook(this.getAttribute('data-id'))">Usun</button>
+                                <button data-id="${books[i]._id}" onclick="updateBook(this.getAttribute('data-id'))">Edytuj</button>`;
     }
 
 
